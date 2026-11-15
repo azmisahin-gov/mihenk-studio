@@ -91,7 +91,13 @@ export function App({ client }: { client?: ApiClient }) {
   const [tasks, setTasks] = useState<TaskSummary[]>([]);
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [screens, setScreens] = useState<ScreenMeta[]>([]);
-  const [loading, setLoading] = useState(true);
+  /**
+   * Yalnızca ilk yükleme ekranı iskelet gösterir. Sonraki yenilemeler veriyi
+   * yerinde günceller; aksi hâlde açık ekranlar yeniden bağlanır ve kullanıcı
+   * girdisi (ör. yeni görev formu) kaybolur.
+   */
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; tone: "ok" | "error" } | null>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -107,7 +113,11 @@ export function App({ client }: { client?: ApiClient }) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    if (refreshToken === 0) {
+      setInitialLoading(true);
+    } else {
+      setRefreshing(true);
+    }
     Promise.all([api.listTasks(), api.meta()])
       .then(([taskList, meta]) => {
         if (cancelled) return;
@@ -120,7 +130,9 @@ export function App({ client }: { client?: ApiClient }) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : "Veri yüklenemedi.");
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        setInitialLoading(false);
+        setRefreshing(false);
       });
     return () => {
       cancelled = true;
@@ -281,6 +293,7 @@ export function App({ client }: { client?: ApiClient }) {
           <div className="st-banner" role="note">
             <span aria-hidden="true">⚠</span>
             SENTETİK ÖRNEK — RESMÎ BELGE DEĞİLDİR · Bu ortamdaki tüm veri uydurmadır.
+            {refreshing ? <span style={{ marginLeft: "auto", fontWeight: 400 }}>Yenileniyor…</span> : null}
           </div>
 
           {error ? (
@@ -299,7 +312,7 @@ export function App({ client }: { client?: ApiClient }) {
             </Panel>
           ) : null}
 
-          {loading && !error ? (
+          {initialLoading && !error ? (
             <Panel title="Yükleniyor">
               <div className="st-stack">
                 <div className="st-skeleton" style={{ width: "40%" }} />
@@ -309,7 +322,7 @@ export function App({ client }: { client?: ApiClient }) {
             </Panel>
           ) : null}
 
-          {!loading && !error ? (
+          {!initialLoading && !error ? (
             <>
               {screen === "overview" ? (
                 <OverviewScreen

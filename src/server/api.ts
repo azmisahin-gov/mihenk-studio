@@ -372,10 +372,14 @@ async function route(
         bytes: result.bytes,
         contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers: {
-          "content-disposition": `attachment; filename="${encodeURIComponent(result.fileName)}"`,
+          // RFC 5987: ASCII yedek ad + UTF-8 tam ad birlikte verilir.
+          "content-disposition":
+            `attachment; filename="${asciiFileName(result.fileName)}"; ` +
+            `filename*=UTF-8''${encodeURIComponent(result.fileName)}`,
           "x-mihenk-job-id": result.jobId,
           "x-mihenk-page-count": String(result.pageCountHint),
-          "x-mihenk-notice": result.notice,
+          // HTTP başlıkları yalnızca ASCII taşır; Türkçe uyarı yüzde kodlamayla verilir.
+          "x-mihenk-notice": encodeURIComponent(result.notice),
         },
       };
     }
@@ -459,6 +463,15 @@ function serializeBundle(bundle: import("../application/taskBundle.ts").TaskBund
     answerEvidence: bundle.answerEvidence,
     approved: bundle.approved,
   };
+}
+
+/** ASCII olmayan karakterleri yedek ada çevirir; tam ad `filename*` ile verilir. */
+function asciiFileName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\x20-\x7E]/g, "_")
+    .replace(/["\\]/g, "_");
 }
 
 function formatMs(ms: number): string {

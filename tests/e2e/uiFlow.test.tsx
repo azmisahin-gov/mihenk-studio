@@ -149,4 +149,47 @@ describe("Uçtan uca arayüz akışı", () => {
     // Bu ekranda hiçbir kontrol etkin düğme olarak sunulmaz.
     expect(await screen.findByText(/Bu dilimde çalışan özellik yok/)).toBeTruthy();
   });
+
+  it("yeni görev taslağı oluşturulduğunda form durumu korunur ve görev listesi güncellenir", async () => {
+    renderApp();
+    const user = userEvent.setup();
+
+    // Form ekranına git.
+    await user.click(await screen.findByRole("button", { name: /Yeni Görevlendirme/ }));
+    const titleInput = await screen.findByRole("textbox", { name: "Görev başlığı" });
+    await user.clear(titleInput);
+    await user.type(titleInput, "Uçtan uca yeni sentetik görev");
+    const caseInput = screen.getByRole("textbox", { name: "Dosya numarası" });
+    await user.clear(caseInput);
+    await user.type(caseInput, "2026/7777 S. (SENTETİK)");
+
+    // Taslağı oluştur.
+    await user.click(screen.getByRole("button", { name: "Taslağı oluştur" }));
+
+    // Form ekranı yerinde kalmalı ve oluşturma onayı görünmelidir.
+    // (Yenileme, açık ekranı sökerse kullanıcı girdisi kaybolur.)
+    // Oluşturma onayı hem fişte hem panelde görünür; panel düğmesi esas alınır.
+    expect(await screen.findByRole("button", { name: /Taslağı görev alanında aç/ })).toBeTruthy();
+    // Kullanıcının girdiği başlık hâlâ form alanında durmalıdır.
+    expect((screen.getByRole("textbox", { name: "Görev başlığı" }) as HTMLInputElement).value).toBe(
+      "Uçtan uca yeni sentetik görev",
+    );
+  });
+
+  it("yeni görev oluşturulduktan sonra görev listesinde görünür", async () => {
+    renderApp();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: /Yeni Görevlendirme/ }));
+    await user.click(await screen.findByRole("button", { name: "Taslağı oluştur" }));
+    await screen.findByRole("button", { name: /Taslağı görev alanında aç/ });
+
+    // Taslağı görev alanında açar; ardından görev listesine döner.
+    await user.click(screen.getByRole("button", { name: /Taslağı görev alanında aç/ }));
+    await waitFor(() => expect(screen.getByRole("heading", { level: 1 })).toBeTruthy());
+    await user.click(screen.getByRole("button", { name: /Görev listesi/ }));
+
+    await waitFor(() => {
+      expect(screen.getAllByText(/2026\/1234 S\./).length).toBeGreaterThan(0);
+    });
+  });
 });

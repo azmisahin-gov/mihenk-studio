@@ -208,6 +208,31 @@ export interface ApiError extends Error {
   status: number;
 }
 
+/** `Content-Disposition` başlığından dosya adını çıkarır (RFC 5987 destekli). */
+function parseFileName(header: string | null): string {
+  if (!header) return "rapor.docx";
+  const utf8Match = /filename\*=UTF-8''([^;]+)/i.exec(header);
+  if (utf8Match?.[1]) {
+    try {
+      return decodeURIComponent(utf8Match[1]);
+    } catch {
+      // çözülemezse ASCII yedek ada düşülür
+    }
+  }
+  const asciiMatch = /filename="?([^";]+)"?/i.exec(header);
+  return asciiMatch?.[1] ?? "rapor.docx";
+}
+
+/** Yüzde kodlanmış başlık değerini çözer; çözülemezse ham değeri döndürür. */
+function decodeHeaderValue(value: string | null): string {
+  if (!value) return "";
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export class ApiClient {
   constructor(
     private readonly baseUrl = "",
@@ -358,11 +383,9 @@ export class ApiClient {
     const buffer = new Uint8Array(await response.arrayBuffer());
     return {
       bytes: buffer,
-      fileName: decodeURIComponent(
-        (response.headers.get("content-disposition") ?? "").replace(/.*filename="?([^";]+)"?.*/, "$1"),
-      ),
+      fileName: parseFileName(response.headers.get("content-disposition")),
       pageCount: Number(response.headers.get("x-mihenk-page-count") ?? "0"),
-      notice: response.headers.get("x-mihenk-notice") ?? "",
+      notice: decodeHeaderValue(response.headers.get("x-mihenk-notice")),
     };
   }
 

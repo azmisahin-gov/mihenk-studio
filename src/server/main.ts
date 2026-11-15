@@ -12,7 +12,12 @@ import { DEFAULT_ACTOR, repositoriesFor } from "../application/context.ts";
 import { seedGoldenScenario } from "../infrastructure/seed/seedGoldenScenario.ts";
 
 const PORT = Number(process.env.MIHENK_PORT ?? 12000);
-const HOST = "127.0.0.1";
+/**
+ * Varsayılan olarak yalnızca yerel arayüz dinlenir (bkz. ADR-001).
+ * Barındırılan/uzak ortamda erişim için MIHENK_HOST=0.0.0.0 verilebilir;
+ * bu durumda servis yine belirteçle korunur ve kullanıcı bunu açıkça seçer.
+ */
+const HOST = process.env.MIHENK_HOST ?? "127.0.0.1";
 const storageRoot = process.env.MIHENK_STORAGE ?? resolve(process.cwd(), ".mihenk-veri");
 const databasePath = process.env.MIHENK_DB ?? resolve(storageRoot, "mihenk-studio.sqlite");
 const uiRoot = resolve(process.cwd(), "dist/ui");

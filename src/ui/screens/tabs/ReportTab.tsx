@@ -131,15 +131,22 @@ export function ReportTab({
   }
 
   if (error || !report) {
+    // Rapor henüz derlenmemişse bu bir hata değil, bekleyen bir adımdır.
+    const notBuilt = error?.includes("henüz derlenmedi") ?? false;
     return (
-      <Panel title="Rapor yüklenemedi">
-        <Callout tone="error" title="Hata">
-          {error ?? "Rapor verisi yok."}
+      <Panel title={notBuilt ? "Rapor henüz derlenmedi" : "Rapor yüklenemedi"}>
+        <Callout tone={notBuilt ? "info" : "error"} title={notBuilt ? "İlk rapor revizyonu" : "Hata"}>
+          {notBuilt
+            ? "Bu görev için henüz kanonik rapor oluşturulmadı. Raporu derlediğinizde A4 önizleme ve DOCX çıktısı aynı sürümden üretilir."
+            : (error ?? "Rapor verisi yok.")}
         </Callout>
-        <div style={{ marginTop: 12 }}>
-          <Button kind="primary" onClick={load}>
-            Yeniden dene
-          </Button>
+        <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+          {notBuilt ? (
+            <Button kind="primary" onClick={rebuild} disabled={busy}>
+              {busy ? "Derleniyor…" : "Raporu derle"}
+            </Button>
+          ) : null}
+          <Button onClick={load}>Yeniden dene</Button>
         </div>
       </Panel>
     );

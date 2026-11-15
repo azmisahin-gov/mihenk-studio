@@ -1,5 +1,5 @@
 DURUM KANITI KAYDI
-Taban adres: http://127.0.0.1:44279
+Taban adres: http://127.0.0.1:44613
 
 durum-01-hata.png: Yerel servise erişilemedi hata görünümü üretildi.
 durum-02-bekleme.png: Veri yüklenirken bekleme (iskelet) görünümü üretildi.
