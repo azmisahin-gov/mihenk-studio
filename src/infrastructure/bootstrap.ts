@@ -6,7 +6,7 @@
  */
 import { mkdirSync } from "node:fs";
 import { openDatabase, type Database } from "./db/database.ts";
-import { LocalFileStore, type FileStore } from "./fs/fileStore.ts";
+import { LocalFileStore, MemoryFileStore, type FileStore } from "./fs/fileStore.ts";
 import {
   NodeHashProvider,
   SystemClock,
@@ -29,12 +29,14 @@ export interface BootstrapOptions {
 }
 
 export function bootstrap(options: BootstrapOptions): { ctx: AppContext; db: Database } {
-  if (options.storageRoot !== ":memory:" && !options.files) {
+  const inMemory = options.storageRoot === ":memory:";
+  if (!inMemory && !options.files) {
     mkdirSync(options.storageRoot, { recursive: true });
   }
   const db = openDatabase({ path: options.databasePath });
   const hash = options.hash ?? new NodeHashProvider();
-  const files = options.files ?? new LocalFileStore(options.storageRoot, hash);
+  // Bellek içi kök istendiğinde dosyalar diske yazılmaz.
+  const files = options.files ?? (inMemory ? new MemoryFileStore(hash) : new LocalFileStore(options.storageRoot, hash));
   const ctx: AppContext = {
     db,
     clock: options.clock ?? new SystemClock(),
