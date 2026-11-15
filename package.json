@@ -1,0 +1,47 @@
+{
+  "name": "mihenk-studio",
+  "version": "0.6.0-dilim1",
+  "private": true,
+  "type": "module",
+  "description": "MİHENK Studio — bağımsız yeniden yapım, rapor odaklı ilk dikey dilim",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build:ui": "vite build",
+    "build": "npm run typecheck && npm run build:ui",
+    "start": "tsx src/server/main.ts",
+    "seed": "tsx src/server/seed-cli.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit tests/isolation",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "evidence:docx": "tsx src/tools/evidence-docx.ts",
+    "evidence:screens": "tsx src/tools/evidence-screens.ts",
+    "evidence:states": "tsx src/tools/evidence-states.ts",
+    "evidence": "npm run evidence:docx && npm run evidence:states && npm run evidence:screens"
+  },
+  "dependencies": {
+    "docx": "^9.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "fflate": "^0.8.3",
+    "jsdom": "^25.0.1",
+    "playwright-core": "^1.49.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  }
+}

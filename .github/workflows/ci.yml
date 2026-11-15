@@ -1,0 +1,70 @@
+name: Sürekli bütünleştirme
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  dogrulama:
+    name: Derleme, test ve DOCX doğrulaması
+    runs-on: ubuntu-latest
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@v4
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Bağımlılıkları kur
+        run: npm ci --no-audit --no-fund
+
+      - name: Tip denetimi
+        run: npm run typecheck
+
+      - name: Arayüz derlemesi
+        run: npm run build:ui
+
+      - name: LibreOffice ve PDF araçlarını kur
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libreoffice-writer poppler-utils fonts-dejavu-core
+
+      - name: Birim, entegrasyon, yalıtım ve uçtan uca testler
+        run: npm test
+
+      - name: Altın senaryo DOCX üretimi ve sayfa düzeni doğrulaması
+        run: npm run evidence:docx
+
+      - name: DOCX doğrulama kaydını göster
+        run: cat evidence/docx-dogrulama.txt
+
+      - name: DOCX kanıtını yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: docx-kaniti
+          path: |
+            evidence/altin-senaryo-rapor.docx
+            evidence/altin-senaryo-rapor.pdf
+            evidence/docx-dogrulama.txt
+            evidence/a4-onizleme-ozeti.txt
+            evidence/docx-sayfa-1-01.png
+          if-no-files-found: error
+
+      - name: Durum ve ekran kanıtını üret
+        run: |
+          npm run evidence:states
+          npm run evidence:screens
+
+      - name: Ekran ve durum kanıtını yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekran-kaniti
+          path: |
+            evidence/screenshots/
+            evidence/states/
+          if-no-files-found: error
