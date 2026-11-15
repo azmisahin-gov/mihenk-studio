@@ -41,3 +41,36 @@ Bu depo, proje sahibinin görsel yönünü kabul ettiği MİHENK v0.5 Studio den
 ## İlk teslimat
 
 İlk hedef, menüleri tek tek doldurmak değil; bir sentetik görev, iki ses kaydı, sorular, kaynak dayanakları ve bulgular üzerinden tek bir kanonik rapor üretmek; aynı veriden A4 önizleme ve çalışan DOCX çıktısı almaktır. Ayrıntılar [uygulama talimatlarında](docs/03-bagimsiz-uygulayici-ajan-talimatlari.md) açıklanmıştır.
+
+## Uygulama belgeleri
+
+- [Gereksinim izlenebilirlik matrisi](docs/04-gereksinim-izlenebilirlik-matrisi.md) — gereksinim → ekran/akış → alan modeli → test → kabul kanıtı zinciri.
+- [Alan modeli ve durum makineleri](docs/05-alan-modeli-ve-durum-makineleri.md) — varlık ilişkileri ve durum makineleri.
+- [Mimari Karar Kayıtları (ADR)](docs/06-mimari-karar-kayitlari.md) — teknoloji ve mimari kararlar.
+- [Açık kararlar ve riskler](docs/07-acik-kararlar-ve-riskler.md) — onay bekleyen kararlar ve risk kaydı.
+- [İlk teslimat iş listesi](docs/08-ilk-teslimat-is-listesi.md) — sonlu ve sıralı iş kalemleri.
+- [Kullanım ve geliştirme belgesi](docs/09-kullanim-ve-gelistirme.md) — kurulum, çalıştırma, test ve kanıt üretimi.
+- [Sınırlamalar ve sonraki aşamalar](docs/10-sinirlamalar-ve-sonraki-asamalar.md) — dürüstlük beyanı ve kapsam sınırları.
+
+## İlk çalışan teslimat (#2)
+
+Sentetik bir görevlendirme belgesinden başlayıp açılabilir bir DOCX bilirkişi raporuna uzanan tek bir dikey dilim çalışır durumdadır:
+
+- Görev oluşturma ve **görev bazlı veri yalıtımı** (veri katmanında zorunlu, negatif testlerle doğrulanır).
+- Belge alanlarının kaynağa bağlanması; okunamayan alanların tahmin edilmeden teyit kuyruğuna alınması.
+- Beklenen ve teslim alınan materyal envanterlerinin ayrılması.
+- İki sentetik ses kaydı, zaman damgalı segmentler, **ayrı ve değişmez ham ASR / insan düzeltmesi sürümleri**.
+- Soru → yanıt → **gerçek `EvidenceRef` dayanağı** → bulgu ilişkileri; kanıtsız bulgu reddedilir.
+- Tek kanonik `ReportDocument`; A4 önizleme ve **açılabilir DOCX** aynı revizyondan üretilir.
+- Gerçek veriden türetilen rapor kalite kontrolleri; uzman onayı ayrı bir olaydır.
+- Her yüzeyde "SENTETİK ÖRNEK — RESMÎ BELGE DEĞİLDİR" uyarısı.
+
+```bash
+npm install
+npm run build:ui
+npm start          # http://127.0.0.1:12000
+npm test           # otomatik testler (birim, yalıtım, entegrasyon, uçtan uca, erişilebilirlik)
+npm run evidence   # DOCX, ekran görüntüsü ve durum kanıtı üretimi
+```
+
+> **Dürüstlük notu:** Bu dilimde üretim OCR motoru, üretim ASR modeli, gerçek ses oynatma, şifreli kasa, UYAP entegrasyonu, bağımsız denetçi portalı ve masaüstü kurulum paketi **yoktur**. Bu alanlar arayüzde çalışan özellik gibi sunulmaz. Tüm veri sentetiktir; hiçbir gerçek kişi, dava veya ses verisi kullanılmaz. Ayrıntılar [sınırlama belgesinde](docs/10-sinirlamalar-ve-sonraki-asamalar.md).

@@ -1,0 +1,12 @@
+DOCX DOĞRULAMA KAYDI
+Dosya: /workspace/project/mihenk-studio/evidence/altin-senaryo-rapor.docx
+Boyut: 15700 bayt
+Dosya adı: Mihenk-Rapor-2026-9999-S-SENTETİK-rev1-SENTETIK.docx
+Tahmini sayfa sayısı: 10
+Sentetik uyarı: SENTETİK ÖRNEK — RESMÎ BELGE DEĞİLDİR
+
+LibreOffice dönüştürmesi: BAŞARILI
+Üretilen PDF sayfa sayısı: 11
+Sayfa görüntüsü üretildi: /workspace/project/mihenk-studio/evidence/docx-sayfa-1.png
+Türkçe karakter kontrolü: 7/7 bulundu (ı İ ş ğ ç ö ü)
+Sentetik uyarı PDF metin katmanında bulundu: EVET
