@@ -100,13 +100,15 @@ Sabit senaryo `src/infrastructure/seed/goldenScenario.ts` içindedir ve tamamen 
 | Öğe | Adet |
 |---|---|
 | Görevlendirme belgesi | 1 (5 çıkarılmış alan, 1 teyit bekleyen) |
+| Materyal | 3 (1 görevlendirme belgesi + 2 ses kaydı) |
 | Ses kaydı | 2 (sentetik) |
-| Soru | 3 |
-| Zaman damgalı segment | 8 (her iki kayda dağıtılmış) |
+| Soru / yanıt | 3 soru, 3 yanıt |
+| Zaman damgalı segment | 8 (her iki kayda dağıtılmış, 4 + 4) |
 | Transkript sürümü | 2 ham ASR + 2 insan düzeltmesi |
-| Dayanak | 5 (iki farklı kayıttan) |
+| Dayanak | 3 (iki farklı kayıttan) |
 | Bulgu | 2 |
 | Rapor revizyonu | 1 |
+| Beklenen materyal | 2 |
 
 Gerçek kişi, dava, ses veya bilirkişi raporu verisi kullanılmaz. Tüm adlar ve merciler uydurmadır.
 
