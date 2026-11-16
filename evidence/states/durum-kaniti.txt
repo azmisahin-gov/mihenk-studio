@@ -1,0 +1,16 @@
+DURUM KANITI KAYDI
+Taban adres: http://127.0.0.1:44613
+
+durum-01-hata.png: Yerel servise erişilemedi hata görünümü üretildi.
+durum-02-bekleme.png: Veri yüklenirken bekleme (iskelet) görünümü üretildi.
+durum-03-bos.png: Arama sonucu boş durum görünümü üretildi.
+durum-04a-islem-suruyor.png: Dışa aktarma sürerken bekleme durumu görünümü üretildi.
+durum-04b-iptal.png: Dışa aktarma iptal görünümü üretildi (kaynak dosyalar korunur).
+durum-05-yeniden-deneme.png: Yeniden deneme için hazır durum görünümü üretildi.
+durum-06-hata-ve-kurtarma.png: Dışa aktarma hatası ve kurtarma mesajı görünümü üretildi.
+
+Doğrulanan durum geçişleri:
+  bekliyor → çalışıyor → tamamlandı
+  çalışıyor → başarısız → yeniden-denetim-bekliyor
+  çalışıyor → iptal-edildi (kaynak ve çıktı silinmez)
+  açılışta çalışıyor → yeniden-denetim-bekliyor (kurtarma)
