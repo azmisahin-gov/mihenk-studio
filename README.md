@@ -11,6 +11,16 @@ Bu depo, proje sahibinin görsel yönünü kabul ettiği MİHENK v0.5 Studio den
 3. [Bağımsız uygulayıcı ajan talimatları](docs/03-bagimsiz-uygulayici-ajan-talimatlari.md) — sıfırdan uygulama yapacak geliştirici/ajan için görev tanımı ve teslim koşulları.
 4. [Türkçe dil ilkesi](DIL-ILKESI.md) — teknik tanımlayıcıların korunması ve proje metinlerinde Türkçe kullanım kuralları.
 
+## Uygulama planı belgeleri (#1)
+
+5. [Gereksinim izlenebilirlik matrisi](docs/04-gereksinim-izlenebilirlik-matrisi.md) — her gereksinimin benzersiz kimliği, önceliği ve gereksinim → ekran/akış → alan modeli → test → kabul kanıtı zinciri.
+6. [Alan modeli ve durum makineleri](docs/05-alan-modeli-ve-durum-makineleri.md) — varlık ilişkileri ve görev/iş/materyal/transkript/rapor durum makineleri.
+7. [Mimari Karar Kayıtları (ADR)](docs/06-mimari-karar-kayitlari.md) — teknoloji ve mimari kararların seçenek, gerekçe, sonuç ve riskleriyle önerisi.
+8. [Açık kararlar ve riskler](docs/07-acik-kararlar-ve-riskler.md) — onay bekleyen kararlar, belirsiz noktalar ve risk kaydı.
+9. [İlk teslimat iş listesi](docs/08-ilk-teslimat-is-listesi.md) — sonlu, sıralı, bağımlılıkları gösterilmiş iş kalemleri ve tamamlanma tanımları.
+
+> Bu belgeler **taslaktır** ve proje sahibinin gözden geçirmesini bekler. v0.6 sözleşmesi onaylanmadan kapsam kesinleşmiş sayılmaz.
+
 ## Kaynak ve tasarım referansları
 
 - İncelenen çekme isteği: [mihenk çekme isteği #46](https://github.com/azmisahin-gov/mihenk/pull/46)
